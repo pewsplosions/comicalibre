@@ -2,8 +2,9 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 from calibre_plugins.comicalibre.ui.config import prefs
-from PyQt5.Qt import (QDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton,
-                      QVBoxLayout)
+from calibre_plugins.comicalibre.work.main import ComicalibreWork
+from PyQt5.Qt import (QDialog, QHBoxLayout, QLabel, QLineEdit, QProgressBar,
+                      QPushButton, QVBoxLayout)
 
 __license__   = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
@@ -22,8 +23,12 @@ class ComicalibreDialog(QDialog):
     self.create_gui()
 
   def start_process(self):
-    """ Starts the processing worker and progress dialog. """
-    print ("START PROCESSING") # TODO also close this dialog.
+    """ Starts the processing worker and progress bar. """
+    prefs["comic_vine_api_key"] = self.api_msg.text()
+    prefs["tags_to_add"] = self.tags_msg.text()
+    self.worker = ComicalibreWork(self.gui)
+    self.worker.process(self.progress_bar)
+    # TODO Disable start button
 
   def create_gui(self):
     """ Layout arrangement for the dialog and its input widgets. """
@@ -63,6 +68,12 @@ class ComicalibreDialog(QDialog):
     self.start_button.clicked.connect(self.start_process)
     self.layout.addWidget(self.start_button)
 
-    self.setWindowTitle('Comicalibre')
+    # Create progress bar.
+    self.progress_bar = QProgressBar()
+    self.progress_bar.setRange(0, 100)
+    self.progress_bar.setMinimumWidth(485)
+    self.layout.addWidget(self.progress_bar)
+
+    self.setWindowTitle("Comicalibre")
     self.setWindowIcon(self.icon)
     self.resize(self.sizeHint())

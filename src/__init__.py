@@ -14,10 +14,8 @@ class Comicalibre(InterfaceActionBase):
   description             = "Gather Comic Vine metadata for comic books."
   supported_platforms     = ["windows", "osx", "linux"]
   author                  = "Michael Merrill"
-  version                 = (2019, 10, 0) # Year, Month, Build within month
-
+  version                 = (2019, 10, 1) # Year, Month, Build within month
   minimum_calibre_version = (0, 7, 53)
-
   actual_plugin = "calibre_plugins.comicalibre.ui.main:ComicalibreInterface"
 
   def is_customizable(self):
