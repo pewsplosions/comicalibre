@@ -96,7 +96,8 @@ class ComicalibreVineWork():
     md.set("#storyarcs", stories)
     md.set("#creators", creators)
     md.set("authors", authors)
-    md.set("pubdate", parse(data["results"]["cover_date"]))
+    if (data["results"]["cover_date"] is not None):
+      md.set("pubdate", parse(data["results"]["cover_date"]))
     md.set("comments", data["results"]["description"] + cvhtml)
     md.set("series_index", float(data["results"]["issue_number"]))
 
@@ -104,6 +105,8 @@ class ComicalibreVineWork():
     """ Get issue ID from Comic Vine. """
     if (isinstance(issue, basestring) and issue != "0"):
       issue = issue.lstrip("0")
+    elif (isinstance(issue, float)):
+      issue = int(issue)
     params = {
       "format": "json",
       "limit": "1",
