@@ -29,7 +29,7 @@ class ConfigWidget(QWidget):
     self.api_msg.setFixedWidth(350)
     self.api_msg.setText(prefs["comic_vine_api_key"])
 
-    self.api_label = QLabel("Comic Vine API Key:")
+    self.api_label = QLabel("Comic Vine API Key")
     self.api_label.setBuddy(self.api_msg)
 
     self.api_layout.addWidget(self.api_label)
@@ -40,7 +40,7 @@ class ConfigWidget(QWidget):
     self.tags_msg = QLineEdit(self)
     self.tags_msg.setText(prefs["tags_to_add"])
 
-    self.tags_label = QLabel("Tags To Add:")
+    self.tags_label = QLabel("Tags To Add")
     self.tags_label.setBuddy(self.tags_msg)
 
     self.tags_layout.addWidget(self.tags_label)

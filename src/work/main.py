@@ -15,7 +15,7 @@ __docformat__ = "restructuredtext en"
 
 class ComicalibreWork(Thread): # TODO Should this be a Thread?
   """ Control the order of processing for the work being done. """
-  bad_format = []
+  errors = []
 
   def __init__(self, gui):
     self.calibre_worker = ComicalibreCalibreWork(gui)
@@ -23,8 +23,8 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
     self.prog_worker = ComicalibreProgressWork()
     self.util_worker = ComicalibreUtilityWork()
 
-  def process(self, progress_bar):
-    self.bad_format = []
+  def process(self, progress_bar, process_type):
+    self.errors = []
     progress_bar.setValue(0)
     self.prog_worker.progress_bar = progress_bar
 
@@ -35,26 +35,34 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
     # Loop through to get all current metadata.
     for book in books:
       md = self.calibre_worker.get_current_metadata(book)
+      id_for_errors = ""
+      if (md.series_index is not None):
+        id_for_errors = " " + str(md.series_index)
 
-      volume_id = self.util_worker.get_volume(md)
+      volume_id = self.util_worker.get_volume(md, process_type)
       if (volume_id == -1):
-        self.bad_format.append(md)
+        self.errors.append(md.title + id_for_errors +
+          ": Was unable to determine volume ID from the given input.")
         self.prog_worker.iterate()
         continue
 
-      issue = self.util_worker.get_issue(md)
+      issue = self.util_worker.get_issue(md, process_type)
       if (issue == -1):
-        self.bad_format.append(md)
+        self.errors.append(md.title + id_for_errors +
+          ": Was unable to determine issue number from the given input.")
         self.prog_worker.iterate()
         continue
 
       # Fill metadata from Comic Vine.
-      self.vine_worker.get_metadata(md, volume_id, issue)
+      try:
+        self.vine_worker.get_metadata(md, volume_id, issue, process_type == 2)
+      except:
+        self.errors.append(md.title + id_for_errors +
+          ": Unable to get info from Comic Vine with given IDs.")
 
       # Add infromation that is part of the title or preferences.
       new_title = md.title.split("---")[0].strip().title()
       md.set("title", new_title)
-      md.set("series_index", issue)
       md.set("languages", ["English"])
       md.set("title_sort", None) # Calibre will figure this out.
       md.set("authors_sort", None) # Calibre will figure this out.
@@ -66,5 +74,12 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
         tag = tag.strip().title()
       md.set("tags", new_tags)
 
-      self.calibre_worker.save_metadata(book, md)
+      try:
+        self.calibre_worker.save_metadata(book, md)
+      except:
+        self.errors.append(md.title + id_for_errors +
+          ": Received data from Comic Vine that was unable to be saved.")
+
       self.prog_worker.iterate()
+
+    return self.errors

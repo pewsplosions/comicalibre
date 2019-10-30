@@ -28,9 +28,11 @@ class ComicalibreVineWork():
       url = url + "&" + param + "=" + params[param]
     return url
 
-  def get_metadata(self, md, volume_id, issue):
+  def get_metadata(self, md, volume_id, issue, issue_is_id):
     """ Main process to get metadata from Comic Vine and add to Calibre. """
-    issue_id = self.get_issue_id(volume_id, issue)
+    issue_id = issue
+    if (not issue_is_id):
+      issue_id = self.get_issue_id(volume_id, issue)
     self.add_issue_data(md, issue_id)
     self.add_volume_data(md, volume_id)
     md.set("#comicvineissueid", issue_id)
@@ -41,7 +43,7 @@ class ComicalibreVineWork():
       "format": "json",
       "field_list": "name,publisher,start_year"
     }
-    url = self.build_url("volume/4050-" + volume_id, params)
+    url = self.build_url("volume/4050-" + str(volume_id), params)
     response = urllib2.urlopen(url)
     result = response.read()
     data = json.loads(result.decode("utf-8"))
@@ -62,7 +64,8 @@ class ComicalibreVineWork():
                     "person_credits," +
                     "character_credits," +
                     "story_arc_credits," +
-                    "site_detail_url"
+                    "site_detail_url," +
+                    "issue_number"
     }
     url = self.build_url("issue/4000-" + str(issue_id), params)
     response = urllib2.urlopen(url)
@@ -95,14 +98,17 @@ class ComicalibreVineWork():
     md.set("authors", authors)
     md.set("pubdate", parse(data["results"]["cover_date"]))
     md.set("comments", data["results"]["description"] + cvhtml)
+    md.set("series_index", float(data["results"]["issue_number"]))
 
   def get_issue_id(self, volume_id, issue):
     """ Get issue ID from Comic Vine. """
+    if (isinstance(issue, basestring) and issue != "0"):
+      issue = issue.lstrip("0")
     params = {
       "format": "json",
       "limit": "1",
       "field_list": "id",
-      "filter": "volume:" + volume_id + ",issue_number:" + issue.lstrip("0")
+      "filter": "volume:" + str(volume_id) + ",issue_number:" + str(issue)
     }
     url = self.build_url("issues/", params)
     response = urllib2.urlopen(url)
