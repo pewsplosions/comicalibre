@@ -90,7 +90,7 @@ class ComicalibreVineWork():
     if (len(authors) <= 0): authors.append("Unknown")
 
     cvurl = data["results"]["site_detail_url"]
-    cvhtml = "<p>Learn more at <a href='" + cvurl + "'>Comic Vine</a>.</p>"
+    cvhtml = "<p>See <a href='" + cvurl + "'>Comic Vine</a> for more.</p>"
 
     md.set("#characters", characters)
     md.set("#storyarcs", stories)
