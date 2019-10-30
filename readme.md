@@ -1,5 +1,10 @@
 # Comicalibre
 
+### Install
+Zip the contents of the src directory. Or download from the Releases, if anything is there.
+
+Installing plugins in Calibre is as simple as opening Preferences > Plugins and clicking 'Load plugin from file' and choosing the zip file from above.
+
 #### What is it?
 Plugin that can be used to gather various metadata from Comic Vine and update Calibre's metadata to match.
 
