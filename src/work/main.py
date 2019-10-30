@@ -23,7 +23,7 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
     self.prog_worker = ComicalibreProgressWork()
     self.util_worker = ComicalibreUtilityWork()
 
-  def process(self, progress_bar, process_type):
+  def process(self, progress_bar, process_type, keep_tags):
     self.errors = []
     progress_bar.setValue(0)
     self.prog_worker.progress_bar = progress_bar
@@ -52,7 +52,7 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
         self.errors.append(md.title + id_for_errors +
           ": Unable to get info from Comic Vine with given IDs.")
 
-      self.set_given_metadata(md)
+      self.set_given_metadata(md, keep_tags)
 
       try:
         self.calibre_worker.save_metadata(book, md)
@@ -80,7 +80,7 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
       return True
     return False
 
-  def set_given_metadata(self, md):
+  def set_given_metadata(self, md, keep_tags):
     """ Add infromation that is part of the title or preferences. """
     new_title = md.title.split("---")[0].strip().title()
     md.set("title", new_title)
@@ -93,4 +93,9 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
     new_tags = prefs["tags_to_add"].split(",")
     for tag in new_tags:
       tag = tag.strip().title()
-    md.set("tags", new_tags)
+    if (keep_tags):
+      for tag in md.tags:
+        if (tag not in new_tags):
+          new_tags.append(tag)
+    if (new_tags is not None and len(new_tags) > 0):
+      md.set("tags", new_tags)

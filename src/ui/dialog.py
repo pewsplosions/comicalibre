@@ -5,8 +5,9 @@ import os
 
 from calibre_plugins.comicalibre.ui.config import prefs
 from calibre_plugins.comicalibre.work.main import ComicalibreWork
-from PyQt5.Qt import (QDialog, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                      QProgressBar, QPushButton, QVBoxLayout)
+from PyQt5.Qt import (QCheckBox, QDialog, QFrame, QGroupBox, QHBoxLayout,
+                      QLabel, QLineEdit, QProgressBar, QPushButton,
+                      QVBoxLayout)
 
 __license__   = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
@@ -33,7 +34,8 @@ class ComicalibreDialog(QDialog):
     self.title_start.setEnabled(False)
     self.series_start.setEnabled(False)
     self.ids_start.setEnabled(False)
-    errors = self.worker.process(self.progress_bar, process_type)
+    keep_tags = self.keep_tags_cb.isChecked()
+    errors = self.worker.process(self.progress_bar, process_type, keep_tags)
     self.title_start.setEnabled(True)
     self.series_start.setEnabled(True)
     self.ids_start.setEnabled(True)
@@ -84,6 +86,16 @@ class ComicalibreDialog(QDialog):
     self.layout.addLayout(self.api_layout)
     self.layout.addLayout(self.tags_layout)
 
+    # Option to keep current tags.
+    self.keep_tags_cb = QCheckBox("Keep existing tags while adding new.", self)
+    self.layout.addWidget(self.keep_tags_cb)
+
+    # Separate the buttons from the input.
+    self.btn_sep = QFrame()
+    self.btn_sep.setFrameShape(QFrame.HLine)
+    self.btn_sep.setFrameShadow(QFrame.Sunken)
+    self.layout.addWidget(self.btn_sep)
+
     # Create a start button to kick off the processing with title.
     self.title_start = QPushButton("Using Title - Hover For Details", self)
     self.title_start.setToolTip("This expects the title of a book to have " +
@@ -108,6 +120,12 @@ class ComicalibreDialog(QDialog):
       "Comic Vine's IDs for the issue and the volume.")
     self.ids_start.clicked.connect(self.ids_process)
     self.layout.addWidget(self.ids_start)
+
+    # Separate the progress and results.
+    self.result_sep = QFrame()
+    self.result_sep.setFrameShape(QFrame.HLine)
+    self.result_sep.setFrameShadow(QFrame.Sunken)
+    self.layout.addWidget(self.result_sep)
 
     # Create progress bar.
     self.progress_bar = QProgressBar()
