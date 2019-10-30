@@ -97,5 +97,8 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
       for tag in md.tags:
         if (tag not in new_tags):
           new_tags.append(tag)
-    if (new_tags is not None and len(new_tags) > 0):
+    all_empty = True
+    for tag in new_tags:
+      if (len(tag) > 0): all_empty = False
+    if (new_tags is not None and len(new_tags) > 0 and not all_empty):
       md.set("tags", new_tags)
