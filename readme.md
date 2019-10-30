@@ -88,3 +88,8 @@ With that said, the reason I built this is because there really isn't a lot of o
 For example, if you wanted to pull a field from comic vine that is not currently being pulled and put it into your own custom column. In the comicvine.py file there is a method that is creating the url params. You can just add to the fields it is asking for there. Then on the results section in the same file add the result of that new field to the metadata object in your custom column.
 
 Another example would be if you want to make different columns for all the different types of creators instead of just having one column for all of them. Create the columns in Calibre. Edit the comicvine file again. You'll see where I'm already separating Authors. So you can just do that and make a new list for each type of creator. Add them to each of your columns on the results.
+
+#### License
+I don't really know anything about this, but all the examples I saw for calibre plugins used the GPL v3 license.
+
+So that's what I threw in here as well.
