@@ -40,18 +40,10 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
         id_for_errors = " " + str(md.series_index)
 
       volume_id = self.util_worker.get_volume(md, process_type)
-      if (volume_id == -1):
-        self.errors.append(md.title + id_for_errors +
-          ": Was unable to determine volume ID from the given input.")
-        self.prog_worker.iterate()
-        continue
+      if (self.volume_id_has_errors(md, volume_id, id_for_errors)): continue
 
       issue = self.util_worker.get_issue(md, process_type)
-      if (issue == -1):
-        self.errors.append(md.title + id_for_errors +
-          ": Was unable to determine issue number from the given input.")
-        self.prog_worker.iterate()
-        continue
+      if (self.issue_number_has_errors(md, issue, id_for_errors)): continue
 
       # Fill metadata from Comic Vine.
       try:
@@ -60,19 +52,7 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
         self.errors.append(md.title + id_for_errors +
           ": Unable to get info from Comic Vine with given IDs.")
 
-      # Add infromation that is part of the title or preferences.
-      new_title = md.title.split("---")[0].strip().title()
-      md.set("title", new_title)
-      md.set("languages", ["English"])
-      md.set("title_sort", None) # Calibre will figure this out.
-      md.set("authors_sort", None) # Calibre will figure this out.
-      md.set("author_link_map", None) # Calibre will figure this out.
-      md.set("#physicalcopy", False)
-
-      new_tags = prefs["tags_to_add"].split(",")
-      for tag in new_tags:
-        tag = tag.strip().title()
-      md.set("tags", new_tags)
+      self.set_given_metadata(md)
 
       try:
         self.calibre_worker.save_metadata(book, md)
@@ -83,3 +63,34 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
       self.prog_worker.iterate()
 
     return self.errors
+
+  def volume_id_has_errors(self, md, volume_id, id_for_errors):
+    if (volume_id == -1):
+      self.errors.append(md.title + id_for_errors +
+        ": Was unable to determine volume ID from the given input.")
+      self.prog_worker.iterate()
+      return True
+    return False
+
+  def issue_number_has_errors(self, md, issue, id_for_errors):
+    if (issue == -1):
+      self.errors.append(md.title + id_for_errors +
+        ": Was unable to determine issue number from the given input.")
+      self.prog_worker.iterate()
+      return True
+    return False
+
+  def set_given_metadata(self, md):
+    """ Add infromation that is part of the title or preferences. """
+    new_title = md.title.split("---")[0].strip().title()
+    md.set("title", new_title)
+    md.set("languages", ["English"])
+    md.set("title_sort", None) # Calibre will figure this out.
+    md.set("authors_sort", None) # Calibre will figure this out.
+    md.set("author_link_map", None) # Calibre will figure this out.
+    if (md.get("#physicalcopy") is None):
+      md.set("#physicalcopy", False)
+    new_tags = prefs["tags_to_add"].split(",")
+    for tag in new_tags:
+      tag = tag.strip().title()
+    md.set("tags", new_tags)
