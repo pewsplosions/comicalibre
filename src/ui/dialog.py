@@ -7,7 +7,7 @@ from calibre_plugins.comicalibre.ui.config import prefs
 from calibre_plugins.comicalibre.work.main import ComicalibreWork
 from PyQt5.Qt import (QCheckBox, QDialog, QFrame, QGroupBox, QHBoxLayout,
                       QLabel, QLineEdit, QProgressBar, QPushButton,
-                      QVBoxLayout)
+                      QScrollArea, QVBoxLayout)
 
 __license__   = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
@@ -137,8 +137,11 @@ class ComicalibreDialog(QDialog):
     self.result_box = QGroupBox()
     self.result_box.setTitle("Results")
     self.result_text = QLabel("Run Comicalibre to see results.")
+    self.result_scroll = QScrollArea()
+    self.result_scroll.setWidget(self.result_text)
+    self.result_scroll.setWidgetResizable(True)
     self.result_layout = QVBoxLayout()
-    self.result_layout.addWidget(self.result_text)
+    self.result_layout.addWidget(self.result_scroll)
     self.result_box.setLayout(self.result_layout)
     self.layout.addWidget(self.result_box)
 

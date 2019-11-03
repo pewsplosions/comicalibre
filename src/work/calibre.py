@@ -17,8 +17,7 @@ class ComicalibreCalibreWork():
     """ Get selected books as a map of book id to row. """
     rows = self.gui.library_view.selectionModel().selectedRows()
     if not rows or len(rows) == 0:
-      return error_dialog(self.gui, _L['Cannot update metadata'],
-                            _L['No books selected'], show=True)
+      return -1
     return map(self.gui.library_view.model().id, rows)
 
   def get_current_metadata(self, book):

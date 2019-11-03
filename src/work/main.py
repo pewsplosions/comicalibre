@@ -1,6 +1,8 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+import sys
+import traceback
 from threading import Thread
 
 from calibre_plugins.comicalibre.ui.config import prefs
@@ -13,7 +15,7 @@ __license__   = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
 __docformat__ = "restructuredtext en"
 
-class ComicalibreWork(Thread): # TODO Should this be a Thread?
+class ComicalibreWork(Thread):
   """ Control the order of processing for the work being done. """
   errors = []
 
@@ -30,6 +32,10 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
 
     # Get selected books.
     books = self.calibre_worker.get_selected_books()
+    if (books == -1):
+      self.errors.append("No selected books.")
+      return self.errors
+
     self.prog_worker.calculate_steps(books)
 
     # Loop through to get all current metadata.
@@ -47,10 +53,15 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
 
       # Fill metadata from Comic Vine.
       try:
-        self.vine_worker.get_metadata(md, volume_id, issue, process_type == 2)
+        issue_is_id = process_type == 2
+        warn = self.vine_worker.get_metadata(md, volume_id, issue, issue_is_id)
+        self.errors.extend(warn)
       except:
         self.errors.append(md.title + id_for_errors +
           ": Unable to get info from Comic Vine with given IDs.")
+        traceback.print_exc(file=sys.stdout)
+        self.prog_worker.iterate()
+        continue
 
       self.set_given_metadata(md, keep_tags)
 
@@ -59,6 +70,9 @@ class ComicalibreWork(Thread): # TODO Should this be a Thread?
       except:
         self.errors.append(md.title + id_for_errors +
           ": Received data from Comic Vine that was unable to be saved.")
+        traceback.print_exc(file=sys.stdout)
+        self.prog_worker.iterate()
+        continue
 
       self.prog_worker.iterate()
 

@@ -16,6 +16,7 @@ class ComicalibreVineWork():
   """ Control the interaction with Comic Vine API. """
 
   BASE_URL = "https://comicvine.gamespot.com/api/"
+  warnings = []
 
   def __init__(self):
     """ Initialize data attributes for process. """
@@ -30,12 +31,14 @@ class ComicalibreVineWork():
 
   def get_metadata(self, md, volume_id, issue, issue_is_id):
     """ Main process to get metadata from Comic Vine and add to Calibre. """
+    self.warnings = []
     issue_id = issue
     if (not issue_is_id):
       issue_id = self.get_issue_id(volume_id, issue)
     self.add_issue_data(md, issue_id)
     self.add_volume_data(md, volume_id)
     md.set("#comicvineissueid", issue_id)
+    return self.warnings
 
   def add_volume_data(self, md, volume_id):
     """ Find and add found volume data to the metadata object. """
@@ -98,15 +101,19 @@ class ComicalibreVineWork():
     md.set("authors", authors)
     if (data["results"]["cover_date"] is not None):
       md.set("pubdate", parse(data["results"]["cover_date"]))
-    md.set("comments", data["results"]["description"] + cvhtml)
-    md.set("series_index", float(data["results"]["issue_number"]))
+    if (data["results"]["description"] is not None):
+      md.set("comments", data["results"]["description"] + cvhtml)
+    else: md.set("comments", cvhtml)
+    try:
+      md.set("series_index", float(data["results"]["issue_number"]))
+    except:
+      num = data["results"]["issue_number"]
+      self.warnings.append(md.title + " " + num + ": check series index.")
 
   def get_issue_id(self, volume_id, issue):
     """ Get issue ID from Comic Vine. """
     if (isinstance(issue, basestring) and issue != "0"):
       issue = issue.lstrip("0")
-    elif (isinstance(issue, float)):
-      issue = int(issue)
     params = {
       "format": "json",
       "limit": "1",
