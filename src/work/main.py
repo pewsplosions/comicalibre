@@ -3,8 +3,8 @@ from __future__ import (absolute_import, division, print_function,
 
 import sys
 import traceback
-from threading import Thread
 
+from threading import Thread
 from calibre_plugins.comicalibre.ui.config import prefs
 from calibre_plugins.comicalibre.work.calibre import ComicalibreCalibreWork
 from calibre_plugins.comicalibre.work.comicvine import ComicalibreVineWork
