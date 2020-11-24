@@ -1,9 +1,10 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-__license__   = "GPL v3"
+__license__ = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
 __docformat__ = "restructuredtext en"
+
 
 class ComicalibreCalibreWork():
   """ Control the interaction with calibre GUI and DB. """

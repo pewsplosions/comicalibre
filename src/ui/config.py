@@ -4,13 +4,14 @@ from __future__ import (absolute_import, division, print_function,
 from calibre.utils.config import JSONConfig
 from PyQt5.Qt import QHBoxLayout, QLabel, QLineEdit, QVBoxLayout, QWidget
 
-__license__   = "GPL v3"
+__license__ = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
 __docformat__ = "restructuredtext en"
 
 prefs = JSONConfig("plugins/comicalibre")
 prefs.defaults["comic_vine_api_key"] = ""
 prefs.defaults["tags_to_add"] = ""
+
 
 class ConfigWidget(QWidget):
   """ GUI for configuration of default user input values. """

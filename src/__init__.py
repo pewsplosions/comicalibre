@@ -3,18 +3,19 @@ from __future__ import (absolute_import, division, print_function,
 
 from calibre.customize import InterfaceActionBase
 
-__license__   = "GPL v3"
-__copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
+__license__ = "GPL v3"
+__copyright__ = "2020, Michael Merrill <michael@merrill.tk>"
 __docformat__ = "restructuredtext en"
+
 
 class Comicalibre(InterfaceActionBase):
   """ Base Comicalibre plugin class. Entry point for everything. """
 
-  name                    = "Comicalibre"
-  description             = "Gather Comic Vine metadata for comic books."
-  supported_platforms     = ["windows", "osx", "linux"]
-  author                  = "Michael Merrill"
-  version                 = (2019, 11, 0) # Year, Month, Build within month
+  name = "Comicalibre"
+  description = "Gather Comic Vine metadata for comic books."
+  supported_platforms = ["windows", "osx", "linux"]
+  author = "Michael Merrill"
+  version = (2020, 11, 0)  # Year, Month, Build within month
   minimum_calibre_version = (0, 7, 53)
   actual_plugin = "calibre_plugins.comicalibre.ui.main:ComicalibreInterface"
 

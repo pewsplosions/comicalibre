@@ -2,15 +2,16 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-import urllib2
 
 from calibre.ebooks.metadata.book.base import Metadata
 from calibre_plugins.comicalibre.ui.config import prefs
 from dateutil.parser import parse
+from urllib.request import urlopen
 
-__license__   = "GPL v3"
+__license__ = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
 __docformat__ = "restructuredtext en"
+
 
 class ComicalibreVineWork():
   """ Control the interaction with Comic Vine API. """
@@ -43,11 +44,11 @@ class ComicalibreVineWork():
   def add_volume_data(self, md, volume_id):
     """ Find and add found volume data to the metadata object. """
     params = {
-      "format": "json",
-      "field_list": "name,publisher,start_year"
+        "format": "json",
+        "field_list": "name,publisher,start_year"
     }
     url = self.build_url("volume/4050-" + str(volume_id), params)
-    response = urllib2.urlopen(url)
+    response = urlopen(url)
     result = response.read()
     data = json.loads(result.decode("utf-8"))
     volume_name = data["results"]["name"]
@@ -61,17 +62,17 @@ class ComicalibreVineWork():
   def add_issue_data(self, md, issue_id):
     """ Find and add found issue data to the metadata object. """
     params = {
-      "format": "json",
-      "field_list": "cover_date," +
-                    "description," +
-                    "person_credits," +
-                    "character_credits," +
-                    "story_arc_credits," +
-                    "site_detail_url," +
-                    "issue_number"
+        "format": "json",
+        "field_list": "cover_date," +
+        "description," +
+        "person_credits," +
+        "character_credits," +
+        "story_arc_credits," +
+        "site_detail_url," +
+        "issue_number"
     }
     url = self.build_url("issue/4000-" + str(issue_id), params)
-    response = urllib2.urlopen(url)
+    response = urlopen(url)
     result = response.read()
     data = json.loads(result.decode("utf-8"))
     char_data = data["results"]["character_credits"]
@@ -90,7 +91,8 @@ class ComicalibreVineWork():
       creators.append(creator["name"])
       if (creator_role.find("writer") >= 0):
         authors.append(creator["name"])
-    if (len(authors) <= 0): authors.append("Unknown")
+    if (len(authors) <= 0):
+      authors.append("Unknown")
 
     cvurl = data["results"]["site_detail_url"]
     cvhtml = "<p>See <a href='" + cvurl + "'>Comic Vine</a> for more.</p>"
@@ -103,7 +105,8 @@ class ComicalibreVineWork():
       md.set("pubdate", parse(data["results"]["cover_date"]))
     if (data["results"]["description"] is not None):
       md.set("comments", data["results"]["description"] + cvhtml)
-    else: md.set("comments", cvhtml)
+    else:
+      md.set("comments", cvhtml)
     try:
       md.set("series_index", float(data["results"]["issue_number"]))
     except:
@@ -112,16 +115,16 @@ class ComicalibreVineWork():
 
   def get_issue_id(self, volume_id, issue):
     """ Get issue ID from Comic Vine. """
-    if (isinstance(issue, basestring) and issue != "0"):
+    if (isinstance(issue, Metadata.basestring) and issue != "0"):
       issue = issue.lstrip("0")
     params = {
-      "format": "json",
-      "limit": "1",
-      "field_list": "id",
-      "filter": "volume:" + str(volume_id) + ",issue_number:" + str(issue)
+        "format": "json",
+        "limit": "1",
+        "field_list": "id",
+        "filter": "volume:" + str(volume_id) + ",issue_number:" + str(issue)
     }
     url = self.build_url("issues/", params)
-    response = urllib2.urlopen(url)
+    response = urlopen(url)
     result = response.read()
     data = json.loads(result.decode("utf-8"))
     return data["results"][0]["id"]

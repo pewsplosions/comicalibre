@@ -9,9 +9,10 @@ from PyQt5.Qt import (QCheckBox, QDialog, QFrame, QGroupBox, QHBoxLayout,
                       QLabel, QLineEdit, QProgressBar, QPushButton,
                       QScrollArea, QVBoxLayout)
 
-__license__   = "GPL v3"
+__license__ = "GPL v3"
 __copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
 __docformat__ = "restructuredtext en"
+
 
 class ComicalibreDialog(QDialog):
   """ The main dialog for users to enter options before starting. """
@@ -98,26 +99,30 @@ class ComicalibreDialog(QDialog):
 
     # Create a start button to kick off the processing with title.
     self.title_start = QPushButton("Using Title - Hover For Details", self)
-    self.title_start.setToolTip("This expects the title of a book to have " +
-      "a specific formatted string containing volume ID and issue #. e.g." +
-      os.linesep + "Desired Title --- v1234 n0124" + os.linesep +
-      "Where --- is required and the number after v matches Comic Vine's " +
-      "volume ID. The number after n is the issue number.")
+    self.title_start.setToolTip("This expects the title of a book to have a "
+                                "specific formatted string containing volume "
+                                "ID and issue#. e.g." + os.linesep + "Desired "
+                                "Title --- v1234 n0124" + os.linesep + "Where "
+                                "--- is required and the number after v "
+                                "matches Comic Vine's volume ID. The number "
+                                "after n is the issue number.")
     self.title_start.clicked.connect(self.title_process)
     self.layout.addWidget(self.title_start)
 
     # Create a start button to kick off the processing with series.
     self.series_start = QPushButton("Using Series - Hover For Details", self)
-    self.series_start.setToolTip("This expects the series name to match " +
-      "the Comic Vine volume ID and the series number equals issue number.")
+    self.series_start.setToolTip("This expects the series name to match the "
+                                 "Comic Vine volume ID and the series number "
+                                 "equals issue number.")
     self.series_start.clicked.connect(self.series_process)
     self.layout.addWidget(self.series_start)
 
     # Create a start button to kick off the processing with CV IDs.
     self.ids_start = QPushButton("Using IDs - Hover For Details", self)
-    self.ids_start.setToolTip("This expects two custom columns with lookup " +
-      "comicvineissueid and comicvinevolumeid. These must match " +
-      "Comic Vine's IDs for the issue and the volume.")
+    self.ids_start.setToolTip("This expects two custom columns with lookup "
+                              "comicvineissueid and comicvinevolumeid. "
+                              "These must match Comic Vine's IDs for the "
+                              "issue and the volume.")
     self.ids_start.clicked.connect(self.ids_process)
     self.layout.addWidget(self.ids_start)
 

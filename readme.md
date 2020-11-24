@@ -11,6 +11,8 @@ Plugin that can be used to gather various metadata from Comic Vine and update Ca
 #### Assumptions
 This plugin, in its default state, assumes certain custom columns have been created in Calibre. For it to work properly these need to be there. (If you don't like the setup, see #Changes below.)
 
+Note: The ampersand separated columns can be found by choosing comma separated and check the contains names box.
+
 <u>Column List</u><br />
 1. Characters with lookup characters - Ampersand separated text, shown in the Tag browser.
 2. Creators with lookup creators - Ampersand separated text, shown in the Tag browser.
@@ -20,6 +22,8 @@ This plugin, in its default state, assumes certain custom columns have been crea
 6. Comic Vine Issue ID with lookup comicvineissueid - Integers
 
 #### How does it work?
+Note: If the icon is not in your toolbar you may have to go to Preferences > Toolbars & menus > choose The Main Toolbar and add the Comicalibre icon to the right from the left.
+
 It requires a Comic Vine API key to be entered. You can get this free from their site.
 
 It can also take a comma separated list of tags. But this is optional.
