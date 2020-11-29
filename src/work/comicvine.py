@@ -115,7 +115,7 @@ class ComicalibreVineWork():
 
   def get_issue_id(self, volume_id, issue):
     """ Get issue ID from Comic Vine. """
-    if (isinstance(issue, Metadata.basestring) and issue != "0"):
+    if (isinstance(issue, str) and issue != "0"):
       issue = issue.lstrip("0")
     params = {
         "format": "json",

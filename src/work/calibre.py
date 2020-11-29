@@ -19,7 +19,7 @@ class ComicalibreCalibreWork():
     rows = self.gui.library_view.selectionModel().selectedRows()
     if not rows or len(rows) == 0:
       return -1
-    return map(self.gui.library_view.model().id, rows)
+    return list(map(self.gui.library_view.model().id, rows))
 
   def get_current_metadata(self, book):
     """ Get the metadata object of a book from the current database. """
