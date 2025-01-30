@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function,
 from calibre.customize import InterfaceActionBase
 
 __license__ = "GPL v3"
-__copyright__ = "2020, Michael Merrill <michael@merrill.tk>"
+__copyright__ = "2020, Michael Merrill <pewsplosions@gmail.com>"
 __docformat__ = "restructuredtext en"
 
 

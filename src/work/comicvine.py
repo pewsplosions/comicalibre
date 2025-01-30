@@ -9,7 +9,7 @@ from dateutil.parser import parse
 from urllib.request import urlopen
 
 __license__ = "GPL v3"
-__copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
+__copyright__ = "2019, Michael Merrill <pewsplosions@gmail.com>"
 __docformat__ = "restructuredtext en"
 
 

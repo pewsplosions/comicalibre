@@ -10,7 +10,7 @@ from PyQt5.Qt import (QCheckBox, QDialog, QFrame, QGroupBox, QHBoxLayout,
                       QScrollArea, QVBoxLayout)
 
 __license__ = "GPL v3"
-__copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
+__copyright__ = "2019, Michael Merrill <pewsplosions@gmail.com>"
 __docformat__ = "restructuredtext en"
 
 

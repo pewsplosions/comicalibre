@@ -5,7 +5,7 @@ from calibre.gui2.actions import InterfaceAction
 from calibre_plugins.comicalibre.ui.dialog import ComicalibreDialog
 
 __license__ = "GPL v3"
-__copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
+__copyright__ = "2019, Michael Merrill <pewsplosions@gmail.com>"
 __docformat__ = "restructuredtext en"
 
 

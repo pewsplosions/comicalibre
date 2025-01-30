@@ -12,7 +12,7 @@ from calibre_plugins.comicalibre.work.progress import ComicalibreProgressWork
 from calibre_plugins.comicalibre.work.utility import ComicalibreUtilityWork
 
 __license__ = "GPL v3"
-__copyright__ = "2019, Michael Merrill <michael@merrill.tk>"
+__copyright__ = "2019, Michael Merrill <pewsplosions@gmail.com>"
 __docformat__ = "restructuredtext en"
 
 
@@ -98,7 +98,7 @@ class ComicalibreWork(Thread):
     return False
 
   def set_given_metadata(self, md, keep_tags):
-    """ Add infromation that is part of the title or preferences. """
+    """ Add information that is part of the title or preferences. """
     new_title = md.title.split("---")[0].strip().title()
     md.set("title", new_title)
     md.set("languages", ["English"])
